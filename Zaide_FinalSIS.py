@@ -12,14 +12,14 @@ class Student:
         self.root = root
         blank_space = ""
         self.root.title(200 * blank_space + "Student Information System")
-        self.root.geometry("1350x530+0+0")
+        self.root.geometry("1400x530+0+0")
         self.root.resizable(False,False)
         self.data = dict()
         self.temp = dict()
         self.filename = "SIS.csv"
         
         StudentFirstName = StringVar()
-        StudentMiddleName = StringVar()
+        StudentMiddleInitial = StringVar()
         StudentLastName = StringVar()
         StudentIDNumber = StringVar()
         StudentYearLevel = StringVar()
@@ -29,7 +29,7 @@ class Student:
         
         if not os.path.exists('SIS.csv'):
             with open('SIS.csv', mode='w') as csv_file:
-                fieldnames = ["Student ID Number", "Last Name", "First Name", "Middle Name","Gender", "Year Level", "Course"]
+                fieldnames = ["Student ID Number", "Last Name", "First Name", "Middle Initial","Gender", "Year Level", "Course"]
                 writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
                 writer.writeheader()
         
@@ -37,7 +37,7 @@ class Student:
             with open('SIS.csv', newline='') as csv_file:
                 reader = csv.DictReader(csv_file)
                 for row in reader:
-                    self.data[row["Student ID Number"]] = {'Last Name': row["Last Name"], 'First Name': row["First Name"], 'Middle Name': row["Middle Name"], 'Gender': row["Gender"],'Year Level': row["Year Level"], 'Course': row["Course"]}
+                    self.data[row["Student ID Number"]] = {'Last Name': row["Last Name"], 'First Name': row["First Name"], 'Middle Initial': row["Middle Initial"], 'Gender': row["Gender"],'Year Level': row["Year Level"], 'Course': row["Course"]}
             self.temp = self.data.copy()
         
         
@@ -47,7 +47,7 @@ class Student:
         def addStudent():
             with open('SIS.csv', "a", newline="") as file:
                 csvfile = csv.writer(file)
-                if StudentIDNumber.get()=="" or StudentFirstName.get()=="" or StudentMiddleName.get()=="" or StudentLastName.get()=="" or StudentYearLevel.get()=="" or StudentGender.get()=="" or StudentCourse.get()=="":
+                if StudentIDNumber.get()=="" or StudentFirstName.get()=="" or StudentMiddleInitial.get()=="" or StudentLastName.get()=="" or StudentYearLevel.get()=="" or StudentGender.get()=="" or StudentCourse.get()=="":
                     tkinter.messagebox.showinfo("Student Information System","Please fill in the box.")
                 else:
                     studentID = StudentIDNumber.get()
@@ -61,10 +61,13 @@ class Student:
                         if y.isdigit()==False or n.isdigit()==False:
                             tkinter.messagebox.showerror("Student Information System", "Invalid ID Number")
                         else:
-                            self.data[StudentIDNumber.get()] = {'Last Name': StudentLastName.get(), 'First Name': StudentFirstName.get(), 'Middle Name': StudentMiddleName.get(), 'Gender': StudentGender.get(),'Year Level': StudentYearLevel.get(), 'Course': StudentCourse.get()}
-                            self.saveData()
-                            tkinter.messagebox.showinfo("Student Information System", "Recorded Successfully")
-                            Clear()
+                            if studentID in self.data:
+                                tkinter.messagebox.showinfo("Student Information System","Student already exists")
+                            else:
+                                self.data[StudentIDNumber.get()] = {'Last Name': StudentLastName.get(), 'First Name': StudentFirstName.get(), 'Middle Initial': StudentMiddleInitial.get(), 'Gender': StudentGender.get(),'Year Level': StudentYearLevel.get(), 'Course': StudentCourse.get()}
+                                self.saveData()
+                                tkinter.messagebox.showinfo("Student Information System", "Recorded Successfully")
+                                Clear()
                     else:
                         tkinter.messagebox.showerror("Student Information System", "Invalid ID Number")      
                 displayData()
@@ -75,7 +78,7 @@ class Student:
         def Clear():
             StudentIDNumber.set("")
             StudentFirstName.set("")
-            StudentMiddleName.set("")
+            StudentMiddleInitial.set("")
             StudentLastName.set("")
             StudentYearLevel.set("")
             StudentGender.set("")
@@ -91,11 +94,11 @@ class Student:
                     IDNumber=row['Student ID Number']
                     LastName=row['Last Name']
                     FirstName=row['First Name']
-                    MiddleName=row['Middle Name']
+                    MiddleInitial=row['Middle Initial']
                     YearLevel=row['Year Level']
                     Course=row['Course']
                     Gender=row['Gender']
-                    tree.insert("",0, values=(IDNumber, LastName, FirstName, MiddleName, Gender, YearLevel, Course))
+                    tree.insert("",0, values=(IDNumber, LastName, FirstName, MiddleInitial, Gender, YearLevel, Course))
                     
         ##### DELETE STUDENT #####
         
@@ -156,7 +159,7 @@ class Student:
             StudentIDNumber.set(values[0])
             StudentLastName.set(values[1])
             StudentFirstName.set(values[2])
-            StudentMiddleName.set(values[3])
+            StudentMiddleInitial.set(values[3])
             StudentGender.set(values[4])
             StudentYearLevel.set(values[5])
             StudentCourse.set(values[6])
@@ -166,10 +169,10 @@ class Student:
         def updateData():
             with open('SIS.csv', "a", newline="") as file:
                 csvfile = csv.writer(file)
-                if StudentIDNumber.get()=="" or StudentFirstName.get()=="" or StudentMiddleName.get()=="" or StudentLastName.get()=="" or StudentYearLevel.get()=="":
+                if StudentIDNumber.get()=="" or StudentFirstName.get()=="" or StudentMiddleInitial.get()=="" or StudentLastName.get()=="" or StudentYearLevel.get()=="":
                     tkinter.messagebox.showinfo("Student Information System","Please select a student record from the table")
                 else:
-                    self.data[StudentIDNumber.get()] = {'Last Name': StudentLastName.get(), 'First Name': StudentFirstName.get(), 'Middle Name': StudentMiddleName.get(), 'Gender': StudentGender.get(),'Year Level': StudentYearLevel.get(), 'Course': StudentCourse.get()}
+                    self.data[StudentIDNumber.get()] = {'Last Name': StudentLastName.get(), 'First Name': StudentFirstName.get(), 'Middle Initial': StudentMiddleInitial.get(), 'Gender': StudentGender.get(),'Year Level': StudentYearLevel.get(), 'Course': StudentCourse.get()}
                     self.saveData()
                     tkinter.messagebox.showinfo("Student Information System", "Student Updated Successfully")
                 Clear()
@@ -200,10 +203,10 @@ class Student:
         self.txtFirstName = Entry(self.root, font=('arial',12,'bold'), width=30, justify='left', textvariable = StudentFirstName)
         self.txtFirstName.place(x=390,y=140)
         
-        self.lblMiddleName = Label(self.root, font=('arial',12,'bold'), text="Middle Name", bd=7, anchor=W)
-        self.lblMiddleName.place(x=275,y=165)
-        self.txtMiddleName = Entry(self.root, font=('arial',12,'bold'), width=30, justify='left', textvariable = StudentMiddleName)
-        self.txtMiddleName.place(x=390,y=170)
+        self.lblMiddleInitial = Label(self.root, font=('arial',12,'bold'), text="Middle Initial", bd=7, anchor=W)
+        self.lblMiddleInitial.place(x=275,y=165)
+        self.txtMiddleInitial = Entry(self.root, font=('arial',12,'bold'), width=30, justify='left', textvariable = StudentMiddleInitial)
+        self.txtMiddleInitial.place(x=390,y=170)
             
         self.lblCourse = Label(self.root, font=('arial',12,'bold'), text="Course", bd=7, anchor=W)
         self.lblCourse.place(x=275,y=195)
@@ -259,15 +262,15 @@ class Student:
         scroll_y=Scrollbar(self.root, orient=VERTICAL)
         #scroll_y.grid(row=1, column=1, sticky='ns')
     
-        tree = ttk.Treeview(self.root, height=20, columns=("Student ID Number", "Last Name", "First Name", "Middle Name", "Gender", "Year Level", "Course"), yscrollcommand=scroll_y.set)
+        tree = ttk.Treeview(self.root, height=20, columns=("Student ID Number", "Last Name", "First Name", "Middle Initial", "Gender", "Year Level", "Course"), yscrollcommand=scroll_y.set)
     
         scroll_y.pack(side=RIGHT, fill=Y)
-        scroll_y.place(x=1328,y=79,height=425)
+        scroll_y.place(x=1382,y=79,height=388)
         
         tree.heading("Student ID Number", text="Student ID Number")
         tree.heading("Last Name", text="Last Name")
         tree.heading("First Name", text="First Name")
-        tree.heading("Middle Name", text="Middle Name")
+        tree.heading("Middle Initial", text="Middle Initial")
         tree.heading("Gender", text="Gender")
         tree.heading("Year Level", text="Year Level")
         tree.heading("Course", text="Course")
@@ -275,20 +278,20 @@ class Student:
     
         tree.column("Student ID Number", width=120)
         tree.column("Last Name", width=100)
-        tree.column("First Name", width=100)
-        tree.column("Middle Name", width=100)
+        tree.column("First Name", width=150)
+        tree.column("Middle Initial", width=100)
         tree.column("Gender", width=70)
         tree.column("Year Level", width=70)
-        tree.column("Course", width=80)
+        tree.column("Course", width=90)
         scroll_y.config(command=tree.yview)
         tree.pack(fill=BOTH,expand=1)
-        tree.place(x=680, y=79)
+        tree.place(x=681, y=79)
         displayData()  
         
     def saveData(self):
         temps = []
         with open('SIS.csv', "w", newline ='') as update:
-            fieldnames = ["Student ID Number","Last Name","First Name","Middle Name","Gender","Year Level","Course"]
+            fieldnames = ["Student ID Number","Last Name","First Name","Middle Initial","Gender","Year Level","Course"]
             writer = csv.DictWriter(update, fieldnames=fieldnames, lineterminator='\n')
             writer.writeheader()
             for id, val in self.data.items():

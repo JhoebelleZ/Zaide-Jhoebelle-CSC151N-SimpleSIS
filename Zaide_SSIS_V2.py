@@ -363,8 +363,8 @@ class Student(tk.Frame):
         
         def addStudent():
             if StudentIDNumber.get() == "" or StudentLastName.get() == "" or StudentFirstName.get() == "" \
-                or StudentMiddleName.get() == "" or CourseCode.get() == "" or StudentYearLevel.get() == "" or StudentGender.get() == "": 
-                tkinter.messagebox.showinfo("Student Information System", "Please fill in the box")
+                or CourseCode.get() == "" or StudentYearLevel.get() == "" or StudentGender.get() == "": 
+                tkinter.messagebox.showinfo("Student Information System", "Please fill in the box with *")
             else:  
                 studentID = StudentIDNumber.get()
                 studentID_list = []
@@ -512,18 +512,18 @@ class Student(tk.Frame):
         
         ##### LABELS & ENTRIES #####
         
-        self.lblStudentID = Label(self, font=('arial',12,'bold'), text="Student ID", bd=7 , anchor=W)
+        self.lblStudentID = Label(self, font=('arial',12,'bold'), text="Student ID *", bd=7 , anchor=W)
         self.lblStudentID.place(x=275,y=75)
         self.txtStudentID = Entry(self, font=('arial',12,'bold'), width=30, justify='left', textvariable = StudentIDNumber)
         self.txtStudentID.place(x=390,y=80)
         self.txtStudentID.insert(0,'YYYY-NNNN')
     
-        self.lblLastName = Label(self, font=('arial',12,'bold'), text="Last Name", bd=7, anchor=W)
+        self.lblLastName = Label(self, font=('arial',12,'bold'), text="Last Name *", bd=7, anchor=W)
         self.lblLastName.place(x=275,y=105)
         self.txtLastName = Entry(self, font=('arial',12,'bold'), width=30, justify='left', textvariable = StudentLastName)
         self.txtLastName.place(x=390,y=110)
     
-        self.lblFirstName = Label(self, font=('arial',12,'bold'), text="First Name", bd=7, anchor=W)
+        self.lblFirstName = Label(self, font=('arial',12,'bold'), text="First Name *", bd=7, anchor=W)
         self.lblFirstName.place(x=275,y=135)
         self.txtFirstName = Entry(self, font=('arial',12,'bold'), width=30, justify='left', textvariable = StudentFirstName)
         self.txtFirstName.place(x=390,y=140)
@@ -533,18 +533,18 @@ class Student(tk.Frame):
         self.txtMiddleName = Entry(self, font=('arial',12,'bold'), width=30, justify='left', textvariable = StudentMiddleName)
         self.txtMiddleName.place(x=390,y=170)
             
-        self.lblCourse = Label(self, font=('arial',12,'bold'), text="Course", bd=7, anchor=W)
+        self.lblCourse = Label(self, font=('arial',12,'bold'), text="Course *", bd=7, anchor=W)
         self.lblCourse.place(x=275,y=195)
         self.txtCourse = Entry(self, font=('arial',12,'bold'), width=30, justify='left', textvariable = CourseCode)
         self.txtCourse.place(x=390,y=200)
             
-        self.lblGender = Label(self, font=('arial',12,'bold'), text="Gender", bd=7, anchor=W)
+        self.lblGender = Label(self, font=('arial',12,'bold'), text="Gender *", bd=7, anchor=W)
         self.lblGender.place(x=275,y=225)
         self.cboGender = ttk.Combobox(self, font=('arial',12,'bold'), state='readonly', width=28, textvariable = StudentGender)
         self.cboGender['values'] = ('Female', 'Male')
         self.cboGender.place(x=390,y=230)
         
-        self.lblYearLevel = Label(self, font=('arial',12,'bold'), text="Year Level", bd=7, anchor=W)
+        self.lblYearLevel = Label(self, font=('arial',12,'bold'), text="Year Level *", bd=7, anchor=W)
         self.lblYearLevel.place(x=275,y=255)
             
         self.cboYearLevel = ttk.Combobox(self, font=('arial',12,'bold'), state='readonly', width=28, textvariable = StudentYearLevel)
@@ -558,6 +558,7 @@ class Student(tk.Frame):
         
         self.title = Label(LeftFrame, font=("Poppins", 50), bg="maroon",text="SSIS", fg="orange")
         self.title.place(x=40,y=10)    
+        
         ##### BUTTONS #####
         
         

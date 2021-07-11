@@ -81,7 +81,7 @@ class Home(tk.Frame):
             cur = conn.cursor()
             cur.execute("PRAGMA foreign_keys = ON")
             cur.execute("CREATE TABLE IF NOT EXISTS students (StudentIDNumber TEXT PRIMARY KEY, StudentLastName TEXT,\
-                    StudentFirstName TEXT, StudentMiddleName TEXT, CourseCode TEXT, StudentYearLevel TEXT, StudentGender TEXT,\
+                    StudentFirstName TEXT, StudentMiddleInitial TEXT, CourseCode TEXT, StudentYearLevel TEXT, StudentGender TEXT,\
                     FOREIGN KEY(CourseCode) REFERENCES courses(CourseCode) \
                     ON UPDATE CASCADE)") 
             conn.commit() 
@@ -357,7 +357,7 @@ class Student(tk.Frame):
         self.controller.title("Student Information System")
 
         StudentFirstName = StringVar()
-        StudentMiddleName = StringVar()
+        StudentMiddleInitial = StringVar()
         StudentLastName = StringVar()
         StudentIDNumber = StringVar()
         StudentYearLevel = StringVar()
@@ -406,9 +406,9 @@ class Student(tk.Frame):
                                     conn = sqlite3.connect("SD.db")
                                     c = conn.cursor() 
                                     c.execute("PRAGMA foreign_keys = ON")                                                                                                                                        
-                                    c.execute("INSERT INTO students(StudentIDNumber, StudentLastName, StudentFirstName, StudentMiddleName, CourseCode, StudentYearLevel, StudentGender) \
+                                    c.execute("INSERT INTO students(StudentIDNumber, StudentLastName, StudentFirstName, StudentMiddleInitial, CourseCode, StudentYearLevel, StudentGender) \
                                               VALUES (?,?,?,?,?,?,?)", \
-                                              (StudentIDNumber.get(),StudentLastName.get(),StudentFirstName.get(),StudentMiddleName.get(), CourseCode.get(),StudentYearLevel.get(),StudentGender.get()))                                       
+                                              (StudentIDNumber.get(),StudentLastName.get(),StudentFirstName.get(),StudentMiddleInitial.get(), CourseCode.get(),StudentYearLevel.get(),StudentGender.get()))                                       
                                     tkinter.messagebox.showinfo("Student Information System", "Student Recorded Successfully")
                                     conn.commit() 
                                     Clear()
@@ -426,7 +426,7 @@ class Student(tk.Frame):
         def Clear():
             StudentIDNumber.set("")
             StudentFirstName.set("")
-            StudentMiddleName.set("")
+            StudentMiddleInitial.set("")
             StudentLastName.set("")
             StudentYearLevel.set("")
             StudentGender.set("")
@@ -435,15 +435,18 @@ class Student(tk.Frame):
         ##### DISPLAY DATA #####
         
         def displayData():
-            tree.delete(*tree.get_children())
-            conn = sqlite3.connect("SD.db")
-            cur = conn.cursor()
-            cur.execute("PRAGMA foreign_keys = ON")
-            cur.execute("SELECT * FROM students")
-            rows = cur.fetchall()
-            for row in rows:
-                tree.insert("", tk.END, text=row[0], values=row[0:])
-            conn.close()
+            try:
+                tree.delete(*tree.get_children())
+                conn = sqlite3.connect("SD.db")
+                cur = conn.cursor()
+                cur.execute("PRAGMA foreign_keys = ON")
+                cur.execute("SELECT * FROM students")
+                rows = cur.fetchall()
+                for row in rows:
+                    tree.insert("", tk.END, text=row[0], values=row[0:])
+                conn.close()
+            except:
+                pass
                     
         ##### DELETE STUDENT #####
         
@@ -487,7 +490,7 @@ class Student(tk.Frame):
             StudentIDNumber.set(values[0])
             StudentLastName.set(values[1])
             StudentFirstName.set(values[2])
-            StudentMiddleName.set(values[3])
+            StudentMiddleInitial.set(values[3])
             CourseCode.set(values[4]) 
             StudentYearLevel.set(values[5])
             StudentGender.set(values[6])
@@ -500,8 +503,8 @@ class Student(tk.Frame):
                     conn = sqlite3.connect("SD.db")
                     c = conn.cursor()
                     c.execute("PRAGMA foreign_keys = ON")
-                    c.execute("UPDATE students SET StudentIDNumber=?, StudentLastName=?, StudentFirstName=?, StudentMiddleName=?,CourseCode=?, StudentYearLevel=?,StudentGender=?\
-                          WHERE StudentIDNumber=?", (StudentIDNumber.get(),StudentLastName.get(),StudentFirstName.get(),StudentMiddleName.get(), CourseCode.get(),StudentYearLevel.get(),StudentGender.get(),\
+                    c.execute("UPDATE students SET StudentIDNumber=?, StudentLastName=?, StudentFirstName=?, StudentMiddleInitial=?,CourseCode=?, StudentYearLevel=?,StudentGender=?\
+                          WHERE StudentIDNumber=?", (StudentIDNumber.get(),StudentLastName.get(),StudentFirstName.get(),StudentMiddleInitial.get(), CourseCode.get(),StudentYearLevel.get(),StudentGender.get(),\
                               tree.set(selected, '#1')))
                     conn.commit()
                     tkinter.messagebox.showinfo("Student Information System", "Student Updated Successfully")
@@ -538,7 +541,7 @@ class Student(tk.Frame):
         
         self.lblMiddleName = Label(self, font=('arial',12,'bold'), text="Middle Initial", bd=7, anchor=W)
         self.lblMiddleName.place(x=275,y=165)
-        self.txtMiddleName = Entry(self, font=('arial',12,'bold'), width=30, justify='left', textvariable = StudentMiddleName)
+        self.txtMiddleName = Entry(self, font=('arial',12,'bold'), width=30, justify='left', textvariable = StudentMiddleInitial)
         self.txtMiddleName.place(x=390,y=170)
             
         self.lblCourse = Label(self, font=('arial',12,'bold'), text="Course Code *", bd=7, anchor=W)
